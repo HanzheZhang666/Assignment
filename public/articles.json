@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "Understanding Elderly Mental Health",
+    "summary": "An in-depth look into the mental health challenges faced by the elderly and ways to address them.",
+    "date": "2024-08-01",
+    "image": "https://medlineplus.gov/images/olderadultmentalhealth230.jpg",
+    "author": "Dr. Susan Williams"
+  },
+  {
+    "id": 2,
+    "title": "The Importance of Social Engagement",
+    "summary": "How social interactions can positively impact the mental health of elderly individuals.",
+    "date": "2024-08-10",
+    "image": "https://www.elderaid.in/images/files/Mentally-supporting-elder-651512490a801.jpg",
+    "author": "John Doe"
+  },
+  {
+    "id": 3,
+    "title": "Strategies for Caregivers",
+    "summary": "Effective strategies for caregivers to support elderly individuals with mental health issues.",
+    "date": "2024-08-15",
+    "image": "https://beverlysdaughter.com/wp-content/uploads/2021/07/AdobeStock_389521495.jpg",
+    "author": "Jane Smith"
+  }
+]

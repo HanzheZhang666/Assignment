@@ -65,7 +65,7 @@ const validateConfirmPassword = (blur) => {
   <div class="container mt-5">
     <div class="row justify-content-center">
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-        <h2 class="mb-4 text-center">Register</h2>
+        <h2 class="mb-4 text-center">Registration Form</h2>
         <form @submit.prevent="handleRegister">
           <div class="mb-3">
             <label for="username" class="form-label">Username</label>
