@@ -70,18 +70,18 @@ const logout = () => {
             </li>
           </ul>
         </li>
-        <li>
+        <!-- <li>
           <router-link to="/community" :class="['nav-link px-2', { active: isActive('community') }]">
             Community
           </router-link>
-        </li>
+        </li> -->
         <li>
           <router-link to="/consult" :class="['nav-link px-2', { active: isActive('consult') }]">
             Consult
           </router-link>
         </li>
         <li>
-          <router-link to="#" :class="['nav-link px-2', { active: isActive('profile') }]">
+          <router-link to="/profile" :class="['nav-link px-2', { active: isActive('profile') }]">
             Profile
           </router-link>
         </li>

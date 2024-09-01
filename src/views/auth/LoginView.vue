@@ -4,7 +4,6 @@ import { useUserStore } from '@/stores/user'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 
-
 const username = ref('')
 const password = ref('')
 const userStore = useUserStore()
@@ -14,19 +13,22 @@ const router = useRouter()
 const handleLogin = () => {
   if (userStore.login(username.value, password.value)) {
     toast.add({ severity: 'success', summary: 'Login Successful', life: 3000 })
-    router.push({ name: 'home' })
+    // router.push({ name: 'home' })
     // Redirect based on role
-    // switch (userStore.role) {
-    //   case 'admin':
-    //     // Redirect to admin dashboard
-    //     break
-    //   case 'consultant':
-    //     // Redirect to consultant page
-    //     break
-    //   case 'user':
-    //     // Redirect to user page
-    //     break
-    // }
+    switch (userStore.user.role) {
+      case 'admin':
+        // Redirect to admin dashboard
+        router.push({ name: 'consult-list' })
+        break
+      case 'consultant':
+        // Redirect to consultant page
+        router.push({ name: 'consult' })
+        break
+      case 'user':
+        // Redirect to user page
+        router.push({ name: 'home' })
+        break
+    }
   } else {
     toast.add({
       severity: 'error',

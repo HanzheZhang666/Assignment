@@ -25,8 +25,8 @@
           <router-link to="/consult" type="button" class="btn btn-primary btn-lg px-4 me-md-2">
             Consult
           </router-link>
-          <router-link to="/community" type="button" class="btn btn-outline-secondary btn-lg px-4">
-            Join Community
+          <router-link to="/resources/lectures" type="button" class="btn btn-outline-secondary btn-lg px-4">
+            Online Lecture
           </router-link>
         </div>
       </div>

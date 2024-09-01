@@ -12,6 +12,9 @@ import UserGuide from '@/views/help/UserGuide.vue'
 import ContactUs from '@/views/help/ContactUs.vue'
 import Community from '@/views/community/Community.vue'
 import Consult from '@/views/consult/Consult.vue'
+import Profile from '@/views/profile/Profile.vue'
+import ConsultList from '@/views/consult/ConsultList.vue'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +68,12 @@ const router = createRouter({
       meta: { layout: 'main' }
     },
     {
+      path: '/consult-list',
+      name: 'consult-list',
+      component: ConsultList,
+      meta: { layout: 'main', authRequired: true, roles: ['admin'] }
+    },
+    {
       path: '/lectures/:id',
       name: 'lecture-details',
       component: LectureDetails,
@@ -95,6 +104,12 @@ const router = createRouter({
       meta: { layout: 'main' }
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+      meta: { layout: 'main', authRequired: true, roles: ['user', 'consultant', 'admin'] }
+    },
+    {
       path: '/test',
       name: 'test',
       // route level code-splitting
@@ -104,6 +119,29 @@ const router = createRouter({
       meta: { layout: 'plain' }
     }
   ]
+})
+
+// authentication for routes
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+
+  // Check if route requires authentication
+  if (to.meta.authRequired) {
+    // Check if the user is logged in
+    if (!userStore.user) {
+      // Redirect to login page if not authenticated
+      return next({ name: 'login' })
+    }
+
+    // Check if the route requires specific roles
+    if (to.meta.roles && !to.meta.roles.includes(userStore.user.role)) {
+      // Redirect or show an error if roles do not match
+      return next({ name: 'home' }) // Redirect to home
+    }
+  }
+
+  // If all checks pass, proceed to the route
+  next()
 })
 
 export default router

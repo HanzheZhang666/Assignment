@@ -19,6 +19,10 @@ const errors = ref({
 })
 
 const handleRegister = () => {
+  if (errors.value.username || errors.value.password || errors.value.confirmPassword) {
+    return
+  }
+
   const result = userStore.register(username.value, password.value, role.value)
 
   if (result.success) {

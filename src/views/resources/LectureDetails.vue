@@ -60,9 +60,11 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useVideoStore } from '@/stores/video'
+import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
 const videoStore = useVideoStore()
+const userStore = useUserStore()
 const videoId = route.params.id
 
 const video = ref(null)
@@ -82,7 +84,17 @@ const fetchVideo = () => {
 
 const submitRating = () => {
   if (video.value) {
-    videoStore.addReview(videoId, { rating: newRating.value, comment: newComment.value })
+    // Get the current user's username
+    const username = userStore.user?.username
+    if (!username) {
+      alert('You need to be logged in to submit a review.')
+      return
+    }
+    videoStore.addReview(videoId, {
+      user: username,
+      rating: newRating.value,
+      comment: newComment.value
+    })
     newRating.value = 1
     newComment.value = ''
     fetchVideo()
