@@ -16,6 +16,9 @@ import Toast from 'primevue/toast'
 import App from './App.vue'
 import router from './router'
 
+// firebase
+import { initializeApp } from 'firebase/app'
+
 // Initialize lecture videos
 const initialVideos = [
   {
@@ -70,5 +73,17 @@ app.use(ToastService)
 
 // register toast component
 app.component('Toast', Toast)
+
+// initialize firebase app
+const firebaseConfig = {
+  apiKey: 'AIzaSyBBV8ZtuPFf5uJ5QYm4dH_Dl0XOSWgZ12U',
+  authDomain: 'week7-hanzhe-7324d.firebaseapp.com',
+  projectId: 'week7-hanzhe-7324d',
+  storageBucket: 'week7-hanzhe-7324d.appspot.com',
+  messagingSenderId: '139069026734',
+  appId: '1:139069026734:web:01709de27ddc886e25583f'
+}
+
+initializeApp(firebaseConfig)
 
 app.mount('#app')
