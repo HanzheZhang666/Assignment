@@ -76,13 +76,13 @@ app.component('Toast', Toast)
 
 // initialize firebase app
 const firebaseConfig = {
-  apiKey: 'AIzaSyBBV8ZtuPFf5uJ5QYm4dH_Dl0XOSWgZ12U',
-  authDomain: 'week7-hanzhe-7324d.firebaseapp.com',
-  projectId: 'week7-hanzhe-7324d',
-  storageBucket: 'week7-hanzhe-7324d.appspot.com',
-  messagingSenderId: '139069026734',
-  appId: '1:139069026734:web:01709de27ddc886e25583f'
-}
+  apiKey: "AIzaSyBOlnHfwJHjB0moVRsk46ybQBO60bdWLw8",
+  authDomain: "week7-hanzhe.firebaseapp.com",
+  projectId: "week7-hanzhe",
+  storageBucket: "week7-hanzhe.appspot.com",
+  messagingSenderId: "414867498632",
+  appId: "1:414867498632:web:200fd35b3c0cf083f4a13d"
+};
 
 initializeApp(firebaseConfig)
 

@@ -3,10 +3,8 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 const username = ref('')
-const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const role = ref('user') // Default to user role
@@ -14,47 +12,25 @@ const userStore = useUserStore()
 const toast = useToast()
 const router = useRouter()
 
-const useFirebaseAuth = ref(false)
-const auth = getAuth()
-
 const errors = ref({
   username: null,
-  email: null,
   password: null,
   confirmPassword: null
 })
 
 const handleRegister = () => {
-  if (useFirebaseAuth.value) {
-    console.log('Register with firebase email')
-    if (errors.value.email || errors.value.password || errors.value.confirmPassword) {
-      return
-    }
-    createUserWithEmailAndPassword(auth, email.value, password.value)
-      .then(() => {
-        // save into local storage for user role
-        const result = userStore.register(email.value, password.value, role.value)
+  if (errors.value.username || errors.value.password || errors.value.confirmPassword) {
+    return
+  }
 
-        toast.add({ severity: 'success', summary: 'Firebase Register successful!', life: 3000 })
-        router.push({ name: 'login' })
-      })
-      .catch((error) => {
-        toast.add({ severity: 'error', summary: error.message, life: 3000 })
-      })
+  const result = userStore.register(username.value, password.value, role.value)
+
+  if (result.success) {
+    toast.add({ severity: 'success', summary: result.message, life: 3000 })
+    // redirect to login page
+    router.push({ name: 'login' })
   } else {
-    if (errors.value.username || errors.value.password || errors.value.confirmPassword) {
-      return
-    }
-
-    const result = userStore.register(username.value, password.value, role.value)
-
-    if (result.success) {
-      toast.add({ severity: 'success', summary: result.message, life: 3000 })
-      // redirect to login page
-      router.push({ name: 'login' })
-    } else {
-      toast.add({ severity: 'error', summary: result.message, life: 3000 })
-    }
+    toast.add({ severity: 'error', summary: result.message, life: 3000 })
   }
 }
 
@@ -63,15 +39,6 @@ const validateName = (blur) => {
     if (blur) errors.value.username = 'Name must be at least 3 characters'
   } else {
     errors.value.username = null
-  }
-}
-
-const validateEmail = (blur) => {
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailPattern.test(email.value)) {
-    if (blur) errors.value.email = 'Please enter a valid email address'
-  } else {
-    errors.value.email = null
   }
 }
 
@@ -105,25 +72,6 @@ const validateConfirmPassword = (blur) => {
         <h2 class="mb-4 text-center">Registration Form</h2>
         <form @submit.prevent="handleRegister">
           <div class="mb-3">
-            <input type="checkbox" id="useFirebaseAuth" v-model="useFirebaseAuth" />
-            <label for="useFirebaseAuth">Register with Firebase</label>
-          </div>
-
-          <div v-if="useFirebaseAuth" class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              v-model="email"
-              @blur="() => validateEmail(true)"
-              @input="() => validateEmail(false)"
-              required
-            />
-            <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
-          </div>
-
-          <div v-else class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input
               type="text"
@@ -136,7 +84,6 @@ const validateConfirmPassword = (blur) => {
             />
             <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
           </div>
-
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input

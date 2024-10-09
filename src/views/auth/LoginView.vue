@@ -3,39 +3,74 @@ import { ref } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 const username = ref('')
 const password = ref('')
+const email = ref('')
+const useFirebaseAuth = ref(false)
 const userStore = useUserStore()
 const toast = useToast()
 const router = useRouter()
+const auth = getAuth()
 
 const handleLogin = () => {
-  if (userStore.login(username.value, password.value)) {
-    toast.add({ severity: 'success', summary: 'Login Successful', life: 3000 })
-    // router.push({ name: 'home' })
-    // Redirect based on role
-    switch (userStore.user.role) {
-      case 'admin':
-        // Redirect to admin dashboard
-        router.push({ name: 'consult-list' })
-        break
-      case 'consultant':
-        // Redirect to consultant page
-        router.push({ name: 'consult' })
-        break
-      case 'user':
-        // Redirect to user page
-        router.push({ name: 'home' })
-        break
-    }
+  if (useFirebaseAuth.value) {
+    signInWithEmailAndPassword(auth, email.value, password.value)
+      .then(() => {
+        // After firebase login, also login with local storage for its user role
+        userStore.login(email.value, password.value)
+        toast.add({ severity: 'success', summary: 'Firebase Login Successful', life: 3000 })
+        switch (userStore.user.role) {
+          case 'admin':
+            // Redirect to admin dashboard
+            router.push({ name: 'consult-list' })
+            break
+          case 'consultant':
+            // Redirect to consultant page
+            router.push({ name: 'consult' })
+            break
+          case 'user':
+            // Redirect to user page
+            router.push({ name: 'home' })
+            break
+        }
+      })
+      .catch((error) => {
+        toast.add({
+          severity: 'error',
+          summary: 'Firebase Login Failed',
+          detail: error.message,
+          life: 3000
+        })
+      })
   } else {
-    toast.add({
-      severity: 'error',
-      summary: 'Login Failed',
-      detail: 'Invalid credentials',
-      life: 3000
-    })
+    if (userStore.login(username.value, password.value)) {
+      toast.add({ severity: 'success', summary: 'Login Successful', life: 3000 })
+      // router.push({ name: 'home' })
+      // Redirect based on role
+      switch (userStore.user.role) {
+        case 'admin':
+          // Redirect to admin dashboard
+          router.push({ name: 'consult-list' })
+          break
+        case 'consultant':
+          // Redirect to consultant page
+          router.push({ name: 'consult' })
+          break
+        case 'user':
+          // Redirect to user page
+          router.push({ name: 'home' })
+          break
+      }
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Login Failed',
+        detail: 'Invalid credentials',
+        life: 3000
+      })
+    }
   }
 }
 </script>
@@ -46,10 +81,39 @@ const handleLogin = () => {
       <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5">
         <h2 class="mb-4 text-center">Login</h2>
         <form @submit.prevent="handleLogin">
-          <div class="mb-3">
+          <!-- Checkbox to switch between local and Firebase login -->
+          <div class="form-check mb-3">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="useFirebaseAuth"
+              v-model="useFirebaseAuth"
+            />
+            <label class="form-check-label" for="useFirebaseAuth">
+              Use Firebase Authentication
+            </label>
+          </div>
+
+          <!-- Local login fields -->
+          <div v-if="!useFirebaseAuth">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" v-model="username" required />
+            </div>
+          </div>
+
+          <!-- Firebase login fields -->
+          <div v-if="useFirebaseAuth">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" v-model="email" required />
+            </div>
+          </div>
+
+          <!-- <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" v-model="username" required />
-          </div>
+          </div> -->
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control" id="password" v-model="password" required />
