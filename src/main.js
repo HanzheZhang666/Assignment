@@ -16,6 +16,9 @@ import Toast from 'primevue/toast'
 import App from './App.vue'
 import router from './router'
 
+// Apex charts
+import VueApexCharts from 'vue3-apexcharts'
+
 // firebase
 import { initializeApp } from 'firebase/app'
 
@@ -38,9 +41,7 @@ const initialVideos = [
     date: '2024-08-25',
     previewImage: 'https://img.youtube.com/vi/uDFUqnkm6Ak/hqdefault.jpg',
     videoId: 'uDFUqnkm6Ak',
-    reviews: [
-      { user: 'a', rating: 5, comment: 'Very helpful!' }
-    ]
+    reviews: [{ user: 'a', rating: 5, comment: 'Very helpful!' }]
   },
   {
     id: 3,
@@ -74,15 +75,17 @@ app.use(ToastService)
 // register toast component
 app.component('Toast', Toast)
 
+app.use(VueApexCharts)
+
 // initialize firebase app
 const firebaseConfig = {
-  apiKey: "AIzaSyBOlnHfwJHjB0moVRsk46ybQBO60bdWLw8",
-  authDomain: "week7-hanzhe.firebaseapp.com",
-  projectId: "week7-hanzhe",
-  storageBucket: "week7-hanzhe.appspot.com",
-  messagingSenderId: "414867498632",
-  appId: "1:414867498632:web:200fd35b3c0cf083f4a13d"
-};
+  apiKey: 'AIzaSyBOlnHfwJHjB0moVRsk46ybQBO60bdWLw8',
+  authDomain: 'week7-hanzhe.firebaseapp.com',
+  projectId: 'week7-hanzhe',
+  storageBucket: 'week7-hanzhe.appspot.com',
+  messagingSenderId: '414867498632',
+  appId: '1:414867498632:web:200fd35b3c0cf083f4a13d'
+}
 
 initializeApp(firebaseConfig)
 

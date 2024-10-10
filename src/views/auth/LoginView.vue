@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
@@ -14,27 +14,52 @@ const toast = useToast()
 const router = useRouter()
 const auth = getAuth()
 
+onMounted(() => {})
+
 const handleLogin = () => {
   if (useFirebaseAuth.value) {
     signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
-        // After firebase login, also login with local storage for its user role
-        userStore.login(email.value, password.value)
-        toast.add({ severity: 'success', summary: 'Firebase Login Successful', life: 3000 })
-        switch (userStore.user.role) {
-          case 'admin':
-            // Redirect to admin dashboard
-            router.push({ name: 'consult-list' })
-            break
-          case 'consultant':
-            // Redirect to consultant page
-            router.push({ name: 'consult' })
-            break
-          case 'user':
-            // Redirect to user page
-            router.push({ name: 'home' })
-            break
-        }
+        // After firebase auth login, also check firestore login to get user info
+        userStore
+          .login(email.value, password.value)
+          .then((response) => {
+            if (response.success) {
+              toast.add({ severity: 'success', summary: 'Login Successful', life: 3000 })
+
+              // Redirect based on role
+              switch (userStore.user.role) {
+                case 'admin':
+                  // Redirect to admin dashboard
+                  router.push({ name: 'dashboard' })
+                  break
+                case 'consultant':
+                  // Redirect to consultant page
+                  router.push({ name: 'consult' })
+                  break
+                case 'user':
+                  // Redirect to user page
+                  router.push({ name: 'home' })
+                  break
+              }
+            } else {
+              toast.add({
+                severity: 'error',
+                summary: 'Login Failed',
+                detail: 'Invalid credentials',
+                life: 3000
+              })
+            }
+          })
+          .catch((error) => {
+            console.error('Error during login:', error)
+            toast.add({
+              severity: 'error',
+              summary: 'Login Failed',
+              detail: 'An error occurred while trying to log in',
+              life: 3000
+            })
+          })
       })
       .catch((error) => {
         toast.add({
@@ -45,32 +70,45 @@ const handleLogin = () => {
         })
       })
   } else {
-    if (userStore.login(username.value, password.value)) {
-      toast.add({ severity: 'success', summary: 'Login Successful', life: 3000 })
-      // router.push({ name: 'home' })
-      // Redirect based on role
-      switch (userStore.user.role) {
-        case 'admin':
-          // Redirect to admin dashboard
-          router.push({ name: 'consult-list' })
-          break
-        case 'consultant':
-          // Redirect to consultant page
-          router.push({ name: 'consult' })
-          break
-        case 'user':
-          // Redirect to user page
-          router.push({ name: 'home' })
-          break
-      }
-    } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Login Failed',
-        detail: 'Invalid credentials',
-        life: 3000
+    userStore
+      .login(username.value, password.value)
+      .then((response) => {
+        if (response.success) {
+          toast.add({ severity: 'success', summary: 'Login Successful', life: 3000 })
+
+          // Redirect based on role
+          switch (userStore.user.role) {
+            case 'admin':
+              // Redirect to admin dashboard
+              router.push({ name: 'dashboard' })
+              break
+            case 'consultant':
+              // Redirect to consultant page
+              router.push({ name: 'consult' })
+              break
+            case 'user':
+              // Redirect to user page
+              router.push({ name: 'home' })
+              break
+          }
+        } else {
+          toast.add({
+            severity: 'error',
+            summary: 'Login Failed',
+            detail: 'Invalid credentials',
+            life: 3000
+          })
+        }
       })
-    }
+      .catch((error) => {
+        console.error('Error during login:', error)
+        toast.add({
+          severity: 'error',
+          summary: 'Login Failed',
+          detail: 'An error occurred while trying to log in',
+          life: 3000
+        })
+      })
   }
 }
 </script>

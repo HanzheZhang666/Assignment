@@ -26,17 +26,35 @@ const errors = ref({
 
 const handleRegister = () => {
   if (useFirebaseAuth.value) {
-    console.log('Register with firebase email')
+    console.log('Register with Firebase email')
     if (errors.value.email || errors.value.password || errors.value.confirmPassword) {
       return
     }
+
     createUserWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
-        // save into local storage for user role
-        const result = userStore.register(email.value, password.value, role.value)
-
-        toast.add({ severity: 'success', summary: 'Firebase Register successful!', life: 3000 })
-        router.push({ name: 'login' })
+        // Use the register function from userStore to register the user with additional attributes
+        userStore
+          .register(email.value, password.value, role.value)
+          .then((result) => {
+            if (result.success) {
+              toast.add({
+                severity: 'success',
+                summary: 'Firebase Register successful!',
+                life: 3000
+              })
+              router.push({ name: 'login' })
+            } else {
+              toast.add({
+                severity: 'error',
+                summary: result.message || 'Registration failed',
+                life: 3000
+              })
+            }
+          })
+          .catch((error) => {
+            toast.add({ severity: 'error', summary: error.message, life: 3000 })
+          })
       })
       .catch((error) => {
         toast.add({ severity: 'error', summary: error.message, life: 3000 })
@@ -46,15 +64,24 @@ const handleRegister = () => {
       return
     }
 
-    const result = userStore.register(username.value, password.value, role.value)
-
-    if (result.success) {
-      toast.add({ severity: 'success', summary: result.message, life: 3000 })
-      // redirect to login page
-      router.push({ name: 'login' })
-    } else {
-      toast.add({ severity: 'error', summary: result.message, life: 3000 })
-    }
+    // Use the register function from userStore to register the user for local authentication without Firebase
+    userStore
+      .register(username.value, password.value, role.value)
+      .then((result) => {
+        if (result.success) {
+          toast.add({ severity: 'success', summary: result.message, life: 3000 })
+          router.push({ name: 'login' })
+        } else {
+          toast.add({
+            severity: 'error',
+            summary: result.message || 'Registration failed',
+            life: 3000
+          })
+        }
+      })
+      .catch((error) => {
+        toast.add({ severity: 'error', summary: error.message, life: 3000 })
+      })
   }
 }
 

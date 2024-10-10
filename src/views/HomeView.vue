@@ -22,7 +22,7 @@
           find the help and connection you need.
         </p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-          <router-link to="/consult" type="button" class="btn btn-primary btn-lg px-4 me-md-2">
+          <router-link to="/consult/consult" type="button" class="btn btn-primary btn-lg px-4 me-md-2">
             Consult
           </router-link>
           <router-link to="/resources/lectures" type="button" class="btn btn-outline-secondary btn-lg px-4">

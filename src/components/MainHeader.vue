@@ -75,11 +75,62 @@ const logout = () => {
             Community
           </router-link>
         </li> -->
-        <li>
-          <router-link to="/consult" :class="['nav-link px-2', { active: isActive('consult') }]">
+        <!-- Consult -->
+        <li class="nav-item dropdown">
+          <a
+            :class="['nav-link dropdown-toggle px-2 ', { active: isActive('consult') }]"
+            href="#"
+            id="consultDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             Consult
-          </router-link>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="consultDropdown">
+            <li>
+              <router-link class="dropdown-item" to="/consult/consult">Consult</router-link>
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/consult/consult-list"
+                >Consult List</router-link
+              >
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/consult/contact">Email Contact</router-link>
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/consult/realtime-chat">Realtime Chat</router-link>
+            </li>
+          </ul>
         </li>
+        <!-- Admin -->
+        <li class="nav-item dropdown">
+          <a
+            :class="['nav-link dropdown-toggle px-2 ', { active: isActive('admin') }]"
+            href="#"
+            id="adminDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Admin
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+            <li>
+              <router-link class="dropdown-item" to="/admin/dashboard">Dashboard</router-link>
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/admin/user-statistics"
+                >User Statistics</router-link
+              >
+            </li>
+            <li>
+              <router-link class="dropdown-item" to="/admin/user-list">User List</router-link>
+            </li>
+          </ul>
+        </li>
+
         <li>
           <router-link to="/profile" :class="['nav-link px-2', { active: isActive('profile') }]">
             Profile
@@ -124,9 +175,7 @@ const logout = () => {
           </a>
           <ul class="dropdown-menu" aria-labelledby="helpDropdown">
             <li>
-              <router-link class="dropdown-item" to="/help/userguide"
-                >User Guide</router-link
-              >
+              <router-link class="dropdown-item" to="/help/userguide">User Guide</router-link>
             </li>
             <li>
               <router-link class="dropdown-item" to="/help/contactus">Contact us</router-link>

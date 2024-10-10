@@ -16,24 +16,64 @@ const errors = ref({
   confirmPassword: null
 })
 
-const updateProfile = () => {
-  userStore.updateProfile({
-    gender: user.value.gender,
-    age: user.value.age,
-    education: user.value.education
-  })
-  toast.add({ severity: 'success', summary: 'Profile updated successfully!', life: 3000 })
+// const updateProfile = () => {
+//   userStore.updateProfile({
+//     gender: user.value.gender,
+//     age: user.value.age,
+//     education: user.value.education
+//   })
+//   toast.add({ severity: 'success', summary: 'Profile updated successfully!', life: 3000 })
+// }
+const updateProfile = async () => {
+  try {
+    await userStore.updateProfile({
+      gender: user.value.gender,
+      age: user.value.age,
+      education: user.value.education
+    })
+    toast.add({ severity: 'success', summary: 'Profile updated successfully!', life: 3000 })
+  } catch (error) {
+    console.error('Error updating profile:', error)
+    toast.add({
+      severity: 'error',
+      summary: 'Failed to update profile. Please try again.',
+      life: 3000
+    })
+  }
 }
 
-const changeUserPassword = () => {
+// const changeUserPassword = () => {
+//   if (errors.value.password || errors.value.confirmPassword) {
+//     return
+//   }
+//   if (newPassword.value) {
+//     userStore.changePassword(newPassword.value)
+//     toast.add({ severity: 'success', summary: 'Password changed successfully!', life: 3000 })
+//     newPassword.value = ''
+//     confirmPassword.value = ''
+//   } else {
+//     toast.add({ severity: 'error', summary: 'Please enter a new password.', life: 3000 })
+//   }
+// }
+const changeUserPassword = async () => {
   if (errors.value.password || errors.value.confirmPassword) {
     return
   }
+
   if (newPassword.value) {
-    userStore.changePassword(newPassword.value)
-    toast.add({ severity: 'success', summary: 'Password changed successfully!', life: 3000 })
-    newPassword.value = ''
-    confirmPassword.value = ''
+    try {
+      await userStore.changePassword(newPassword.value)
+      toast.add({ severity: 'success', summary: 'Password changed successfully!', life: 3000 })
+      newPassword.value = ''
+      confirmPassword.value = ''
+    } catch (error) {
+      console.error('Error changing password:', error)
+      toast.add({
+        severity: 'error',
+        summary: 'Failed to change password. Please try again.',
+        life: 3000
+      })
+    }
   } else {
     toast.add({ severity: 'error', summary: 'Please enter a new password.', life: 3000 })
   }

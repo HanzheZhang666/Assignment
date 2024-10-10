@@ -14,7 +14,12 @@ import Community from '@/views/community/Community.vue'
 import Consult from '@/views/consult/Consult.vue'
 import Profile from '@/views/profile/Profile.vue'
 import ConsultList from '@/views/consult/ConsultList.vue'
+import Contact from '@/views/consult/Contact.vue'
 import { useUserStore } from '@/stores/user'
+import UserList from '@/views/admin/UserList.vue'
+import UserStatistics from '@/views/admin/UserStatistics.vue'
+import Dashboard from '@/views/admin/Dashboard.vue'
+import RealtimeChat from '@/views/consult/RealtimeChat.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,15 +67,49 @@ const router = createRouter({
       meta: { layout: 'main' }
     },
     {
-      path: '/consult',
+      path: '/consult/consult',
       name: 'consult',
       component: Consult,
       meta: { layout: 'main' }
     },
     {
-      path: '/consult-list',
+      path: '/consult/consult-list',
       name: 'consult-list',
       component: ConsultList,
+      meta: { layout: 'main', authRequired: true, roles: ['admin', 'consultant'] }
+      // meta: { layout: 'main' }
+    },
+    {
+      path: '/consult/contact', // contact by mail
+      name: 'contact',
+      component: Contact,
+      meta: { layout: 'main' }
+    },
+    {
+      path: '/consult/realtime-chat', // gemini chat
+      name: 'realtimechat',
+      component: RealtimeChat,
+      meta: { layout: 'main' }
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'dashboard',
+      component: Dashboard,
+      // meta: { layout: 'main' }
+      meta: { layout: 'main', authRequired: true, roles: ['admin'] }
+    },
+    {
+      path: '/admin/user-statistics',
+      name: 'user-statistics',
+      component: UserStatistics,
+      // meta: { layout: 'main' }
+      meta: { layout: 'main', authRequired: true, roles: ['admin'] }
+    },
+    {
+      path: '/admin/user-list',
+      name: 'user-list',
+      component: UserList,
+      // meta: { layout: 'main' }
       meta: { layout: 'main', authRequired: true, roles: ['admin'] }
     },
     {
