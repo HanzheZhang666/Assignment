@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import mapboxgl from 'mapbox-gl'
 
 mapboxgl.accessToken =
-  'pk.eyJ1IjoiaGFuemhlemhhbmc2NjYiLCJhIjoiY20yMnQ1b3A1MGJ3ZjJqcG5xcng4a2tsaSJ9.j7oQkepL1OvTchFpKKukGw'
+  'TOKEN'
 
 const searchQuery = ref('')
 const places = ref([])

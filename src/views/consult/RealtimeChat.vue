@@ -35,7 +35,7 @@ const sendMessage = async () => {
 
   try {
     const response = await axios.post(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyD4Bu7yLYyh36P-i1VKmmW7qaIxhKFRyF0',
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=TOKEN',
       {
         contents: [
           {
