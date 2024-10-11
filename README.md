@@ -42,7 +42,9 @@ https://week7-hanzhe.web.app/
 Account Information
 
 - Admin Account: Username: admin, Password: admin123
+
 - Consultant Account: Username: consultant1, Password: abc123
+
 - User Account: Username: user1, Password: abc123
 
 ## Registration
